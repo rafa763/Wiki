@@ -6,4 +6,8 @@
 
 {% block body %}
     {{ content|safe }}
+    <br>
+    <br>
+    <br>
+    <a class="btn btn-primary" href="{% url 'encyclopedia:edit' title %}" role="button">Edit</a>
 {% endblock %}

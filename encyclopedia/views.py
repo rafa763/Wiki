@@ -33,3 +33,20 @@ def new(request):
                 "error_msg": f"Entry with title '{title}' already exists."
             })
     return render(request, "encyclopedia/new.html")
+
+def edit(request, title):
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        util.save_entry(title, content)
+        return redirect(reverse("encyclopedia:entry", args=[title]))
+
+
+    entry = util.get_entry(title)
+    if entry is None:
+        return render(request, "encyclopedia/error.html", {
+            "error_msg": f"Entry with title '{title}' does not exist."
+        })
+    return render(request, "encyclopedia/edit.html", {
+            "title": title,
+            "content": util.get_entry(title)
+        })
