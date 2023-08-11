@@ -1,6 +1,7 @@
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from markdown2 import Markdown
+import random as rand
 
 from . import util
 
@@ -20,6 +21,23 @@ def entry(request, title):
         "title": title,
         "content": html
     })
+
+def search(request):
+    query = request.GET.get('q')
+    if query is not None:
+        entries = util.list_entries()
+        results = []
+        for entry in entries:
+            if query.lower() in entry.lower():
+                results.append(entry)
+        return render(request, "encyclopedia/search.html", {
+            "query": query,
+            "results": results
+        })
+    return render(request, "encyclopedia/search.html", {
+            "query": query,
+            "results": results
+        })
 
 def new(request):
     if request.method == 'POST':
@@ -50,3 +68,8 @@ def edit(request, title):
             "title": title,
             "content": util.get_entry(title)
         })
+
+def random():
+    entries = util.list_entries()
+    title = rand.choice(entries)
+    return redirect(reverse("encyclopedia:entry", args=[title]))
