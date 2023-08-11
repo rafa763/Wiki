@@ -5,13 +5,15 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Search results for: {{ query }}</h1>
+    {% if entries %}
+        <h1>Search results for: {{ query }}</h1>
+    {% endif %}
 
     <ul>
         {% for entry in entries %}
             <li><a href="{% url 'encyclopedia:entry' entry %}">{{ entry }}</a></li>
         {% empty %}
-            <li>No results found</li>
+            <h4>No results found, create a <a href="{% url 'encyclopedia:new' %}">page</a> for this entry or return <a href="{% url 'encyclopedia:index' %}">home</a></h5>
         {% endfor %}
     </ul>
 

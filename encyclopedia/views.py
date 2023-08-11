@@ -28,11 +28,13 @@ def search(request):
         entries = util.list_entries()
         results = []
         for entry in entries:
+            if query.lower() == entry.lower():
+                return redirect(reverse("encyclopedia:entry", args=[entry]))
             if query.lower() in entry.lower():
                 results.append(entry)
         return render(request, "encyclopedia/search.html", {
             "query": query,
-            "results": results
+            "entries": results
         })
     return render(request, "encyclopedia/search.html", {
             "query": query,
@@ -69,7 +71,7 @@ def edit(request, title):
             "content": util.get_entry(title)
         })
 
-def random():
+def random(request):
     entries = util.list_entries()
     title = rand.choice(entries)
     return redirect(reverse("encyclopedia:entry", args=[title]))
